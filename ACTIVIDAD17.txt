@@ -1,0 +1,75 @@
+;Un procesador ejecuta 4 hilos de alta carga.
+;Cada hilo incrementa la temperatura en un
+;valor guardado en una variable temp_subida.
+;Calcula el aumento térmico acumulado.
+;Si el aumento es estrictamente mayor a 80
+;(aumento > 80), activa los ventiladores
+;restando 15 al valor proyectado e imprime
+;"Peligro: refrigeracion liquida al maximo".
+;Si es menor o igual a 80, imprime
+;"Temperatura dentro de rango seguro" y la
+;temperatura.
+;Final: Imprimir siempre "Lectura del socket
+;finalizada".
+
+.Const
+
+.Data?
+;declaramos la variable que almacena el dato tipo entero a string
+	texto Byte 5 Dup (?)
+.Data
+;declaramos las variables necesarias para realizar el programa
+	hilo1 		DWord 01H; Valor decimal 1
+	hilo2 		DWord 01H; Valor decimal 1
+	hilo3 		DWord 01H; Valor decimal 1
+	hilo4 		DWord 10H; Valor decimal 16 (10H en hexadecimal)
+	temp_subida DWord  0H; Valor decimal 0
+	titulo1		Byte "Peligro: Refrigeracion liquida al maximo", 0
+	titulo2		Byte "Temperatura dentro de rango seguro", 0
+	fin			Byte "Lectura de socket finalizada", 0
+	mensaje		Byte "Nos vemos", 0
+
+.Code
+
+start:
+;movemos la variable hilo1 a espacio de memoria
+;sumamos la variable hilo2
+;sumamos la variable hilo3
+;sumamos la variable hilo4
+;el resultado de todas las operaciones lo almacenamos en temp_subida
+	Mov Eax, hilo1
+	Add Eax, hilo2
+	Add Eax, hilo3
+	Add Eax, hilo4
+	Mov temp_subida, Eax
+
+;le indicamos al programa sobre el número que será la condición (80)
+	Cmp Eax, 80
+
+;le decimos al programa que si se cumple siendo estrictamente mayor se ejecutará el bloque mayor
+	Jg mayor
+
+;si no se cumple (es menor o igual a 80), entonces se va a mostrar este mensaje junto con la temperatura
+	Invoke dwtoa, temp_subida, Addr texto
+	Invoke MessageBox, 0, Addr texto, Addr titulo2, MB_OK
+;esta línea de código ejecuta el bloque salida
+	Jmp salida
+
+;si se cumplió la condición (es mayor a 80) se ejecuta este bloque
+mayor:
+;se mueve a memoria la variable temp_subida
+;se hace la resta de 15 para activar los ventiladores
+;el nuevo resultado se almacena en la variable temp_subida
+;por último mostramos el mensaje
+	Mov Eax, temp_subida
+	Sub Eax, 15
+	Mov temp_subida, Eax
+
+	Invoke dwtoa, temp_subida, Addr texto
+	Invoke MessageBox, 0, Addr texto, Addr titulo1, MB_OK
+
+;independiente si se cumple o no el bloque este mensaje siempre se mostrará ya que está al final del código
+salida:
+	Invoke MessageBox, 0, Addr fin, Addr mensaje, MB_OK
+
+End start

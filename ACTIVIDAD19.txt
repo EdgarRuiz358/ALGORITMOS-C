@@ -1,0 +1,71 @@
+;Una nave consume 3 unidades distintas de
+;combustible por sector visitado (variable
+;gasto_sector). Calcula el consumo total.
+;Si el combustible gastado es menor o igual
+;a 30 (consumo <= 30), imprime "Consumo
+;eficiente: modo crucero activo".
+;Si supera los 30, imprime "Consumo
+;excesivo: reduciendo potencia de impulso" y
+;reduce la potencia en 10 e imprime el total.
+;Final: Imprimir siempre "Telemetria
+;transmitida"
+
+.Const
+
+.Data?
+;declaramos la variable que almacena el dato tipo entero a string
+	texto Byte 10 Dup (?)
+.Data
+;declaramos las variables necesarias para realizar el programa
+	uni_comb1 		DWord 10H; valor decimal 16 (10H en hexadecimal)
+	uni_comb2 		DWord 10H; valor decimal 16 (10H en hexadecimal)
+	uni_comb3 		DWord 05H; valor decimal 5
+	consumo_total 	DWord 00H; valor decimal 0
+	titulo1			Byte "Consumo eficiente: Modo crucero activo", 0
+	titulo2			Byte "Consumo excesivo: reduciendo potencia de impulso", 0
+	fin1			Byte "Telemetria transmitida", 0
+	fin2			Byte "Resultado de Analisis", 0
+
+
+
+.Code
+
+start:
+;movemos la variable uni_comb1 a espacio de memoria
+;sumamos la variable uni_comb2
+;sumamos la variable uni_comb3
+;el resultado de todas las operaciones lo almacenamos en consumo_total
+	Mov Eax, uni_comb1
+	Add Eax, uni_comb2
+	Add Eax, uni_comb3
+	Mov consumo_total, Eax
+
+;le indicamos al programa sobre el número que será la condición (30)
+	Cmp Eax, 30
+
+;le decimos al programa que si se cumple siendo menor o igual se ejecutará el bloque menorque
+	Jle menorque
+
+;si no se cumple (supera los 30), entonces se reduce la potencia en 10
+;el nuevo resultado se almacena en consumo_total
+;por último mostramos el mensaje junto con el total ajustado
+	Sub Eax, 10
+	Mov consumo_total, Eax
+	Invoke dwtoa, consumo_total, Addr texto
+	Invoke MessageBox, 0, Addr texto, Addr titulo2, MB_OK
+;esta línea de código ejecuta el bloque salida
+	Jmp salida
+
+;si se cumplió la condición (es menor o igual a 30) se ejecuta este bloque
+menorque:
+;se convierte el resultado a texto
+;por último mostramos el mensaje
+	Invoke dwtoa, consumo_total, Addr texto
+	Invoke MessageBox, 0, Addr texto, Addr titulo1, MB_OK
+
+;independiente si se cumple o no el bloque este mensaje siempre se mostrará ya que está al final del código
+salida:
+	Invoke MessageBox, 0, Addr fin1, Addr fin2, MB_OK
+
+
+End start

@@ -1,0 +1,55 @@
+;un cliente compra 4 veces el mismo producto, el costo del producto es una variable
+;si el total por los 4 productos es menor de 60, enotnces imprime "No hay descuento"
+;en caso de que sea mayor a >= 60 entonces descuenta a 10 e imprime el total
+;por ultimo un mensaje de "vuelva pronto"
+.Const
+
+.Data?
+;declaramos al variable para almacenar el tipo de dato entero a tipo string
+	resultadotexto Byte 5 Dup(?)
+.Data
+;declaramos las variables que necesitamos para cumplir las condiciones
+	precio 		DWord 0FH; numero 15 decimal
+	resultado 	DWord 00H; numero cero en decimal
+	titulo3 	Byte "Costo con descuento", 0
+	titulo 		Byte "Costo total de la compra", 0
+	titulo2 	Byte "Fin de programa", 0
+	adios 		Byte "Vuelva pronto", 0
+
+
+.Code
+
+start:
+;movemo a un espacio en la memoria el valor 4 en decimal
+;hacemos la multipicacion por la variable precio
+;movemos el resultado a la variable resultado
+	Mov Eax, 4
+	IMul Eax, precio
+	Mov resultado, Eax
+;aqui le indicamos al programa el numero que sera nuestra condicion
+	Cmp Eax, 60
+;aqui con esta palabra reservada le indicamos que si resultado es <= a 60 brinque al bloque menorigual 
+	Jl menorigual
+
+;si no se cumplio la condicion anterior se viene directo a realizar la resta y mover el nuevo resultado a la variable resultado
+;nos mostrara el mensaje donde nos idnique el total
+	Sub Eax, 10
+	Mov resultado, Eax
+	Invoke dwtoa, resultado, Addr resultadotexto
+	Invoke MessageBox, 0, Addr resultadotexto, Addr titulo3, MB_OK
+;en este bloque hace el brinco a salida para no hacer la operacion del bloque menorigual
+	Jmp salida
+
+;si se cumplio la condicion se realizara lo que esta dentro del bloque que sera mostrar el total
+menorigual:
+
+	Invoke dwtoa, resultado, Addr resultadotexto
+	Invoke MessageBox, 0, Addr resultadotexto, Addr titulo, MB_OK
+
+;independiente si se cumple o no el bloque este mensaje siempre se mostrara ya que esta al final del codigo cuando no se cumple o si se cumple
+salida:
+	Invoke MessageBox, 0, Addr adios, Addr titulo2, MB_OK
+	Invoke ExitProcess, 0
+
+
+End start

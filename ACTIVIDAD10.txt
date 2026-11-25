@@ -1,0 +1,38 @@
+;si una persona es menor de edad imprimir "No puede pasar" y en caso de que si sea
+;mayor de edad "si puede pasar"
+.Const
+
+.Data?
+;declaramos la variable para almacenar el dato entero y pasarlo a string
+	resultadoedad Byte 5 Dup (?)
+.Data
+;declaramos las variables que necesitamos
+	edad DWord 19H
+	titulo Byte "Es Mayor de edad", 0
+	titulo2 Byte "No es mayor de edad", 0
+	adios Byte "Fin de Programa", 0
+
+.Code
+
+start:
+;movemos la variable edad a espacio en memoria
+	Mov Eax, edad
+;le indicamos al programa el numero de la condicion
+	Cmp Eax, 18
+;con esta palabra reservada le indicamos que si es mayor igual brinca al bloque mayorigual
+	Jge mayorigual
+;si no se cumple la condicion, nos mostrara el mensaje donde indica que no es mayor de edad
+	Invoke dwtoa, edad, Addr resultadoedad
+	Invoke MessageBox, 0, Addr resultadoedad, Addr titulo2, MB_OK
+;este apartado le indica al progama que brinque al bloque salida
+	Jmp salida
+;si se cumplio la condicion que es mayor nos ejecutara este bloque el programa
+mayorigual:
+	Invoke dwtoa, edad, Addr resultadoedad
+	Invoke MessageBox, 0, Addr resultadoedad, Addr titulo, MB_OK
+;independiente si se cumple o no el bloque este mensaje siempre se mostrara ya que esta al final del codigo cuando no se cumple o si se cumple
+salida:
+	Invoke MessageBox, 0, Addr adios, Addr adios, MB_OK
+	Invoke ExitProcess, 0
+
+End start

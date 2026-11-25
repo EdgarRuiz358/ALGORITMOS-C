@@ -1,0 +1,69 @@
+;Una turbina tiene 5 mediciones idénticas
+;consecutivas de aceleración
+;almacenadas en una variable llamada
+;acel. Calcula el índice total (acel * 5).
+;Si el índice es diferente de 100 (indice !=
+;100), imprime "Regulando flujo de
+;combustible" y ajusta el índice restando 5.
+;Si el índice es exactamente 100, imprime
+;"Velocidad de crucero estabilizada" y el
+;indice.
+;Final: Imprimir siempre "Ciclo de control
+;completado"
+
+.Const
+
+.Data?
+;declaramos la variable que almacena el dato tipo entero a string
+	texto Byte 5 Dup(?)
+.Data
+;declaramos las variables necesarias para realizar el programa
+	acel 		DWord 14H; valor decimal 20 (14H en hexadecimal)
+	indice 		DWord 64H; valor decimal 100
+	resultado 	DWord 0H; valor decimal 0
+	titulo1 	Byte "Regulando flujo de combustible", 0
+	titulo2 	Byte "Velocidad de Crucero estabilizada", 0
+	adios 		Byte "Ciclo de control completado", 0
+	mensaje		Byte "Hasta pronto", 0
+
+
+
+.Code
+
+start:
+;movemos la variable acel a espacio de memoria
+;multiplicamos el valor por 5
+;el resultado de la operación lo almacenamos en resultado
+	Mov Eax, acel
+	IMul Eax, 5
+	Mov resultado, Eax
+
+;le indicamos al programa sobre el número que será la condición (100)
+	Cmp Eax, indice
+
+;le decimos al programa que si se cumple siendo diferente se ejecutará el bloque diferente
+	Jne diferente
+
+;si no se cumple (es igual a 100), entonces se va a mostrar este mensaje junto con el índice
+	Invoke dwtoa, resultado, Addr texto
+	Invoke MessageBox, 0, Addr texto, Addr titulo2, MB_OK
+;esta línea de código ejecuta el bloque salida
+	Jmp salida
+
+;si se cumplió la condición (es diferente de 100) se ejecuta este bloque
+diferente:
+;se mueve a memoria la variable resultado
+;se hace la resta de 5
+;el nuevo resultado se almacena en la variable resultado
+;por último mostramos el mensaje
+	Mov Eax, resultado
+	Sub Eax, 5
+	Mov resultado, Eax
+	Invoke dwtoa, resultado, Addr texto
+	Invoke MessageBox, 0, Addr texto, Addr titulo1, MB_OK
+
+;independiente si se cumple o no el bloque este mensaje siempre se mostrará ya que está al final del código
+salida:
+	Invoke MessageBox, 0, Addr adios, Addr mensaje, MB_OK
+
+End start

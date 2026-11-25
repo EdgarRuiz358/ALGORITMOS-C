@@ -1,0 +1,41 @@
+;SUMA DE CUATRO NUMEROS
+.Const
+
+.Data?
+Comment*
+	se declara la variable que realiza la conversion a texto para que el 
+	programa nos pueda mostrar el resultado *
+	resultadotexto Byte 5 Dup(?)
+.Data
+Comment*
+	se declaran las variables numeros n(1,2,3,4) donde guardan un valor en 
+	hexadecimal, la informacion se ira sumando en la variable n1, despues 
+	en la varibale resultado, mandaremos a llamar el total de la suma de los numeros
+	ponemos nombre al encabezado con la variable Titulo*
+	N1 DWord 0AH;decimal 10
+	N2 DWord 0BH;decimal 11
+	N3 DWord 0EH;decimal 14
+	N4 DWord 0DH;decimal 13
+	resultado DWord 0H;resultado = 48
+	Titulo Byte "El resultado de sumar los cuatro numeros", 0
+.Code
+start:
+Comment*
+	ponemos en memoria la variable N1, depues hacemos la suma de cada numero, n2+n3+n4
+	una vez sumados, la informacion la mandamos a la variable que esta en blanco resultado
+	hacemos que el programa cargue la informacion obtenida en resultado*
+	Mov Eax, N1
+	Add Eax, N2
+	Add Eax, N3
+	Add Eax, N4
+
+	Mov resultado, Eax
+Comment*
+	aqui hacemos la conversion de tipo entero a String para que el programa pueda mostrarnos el mensaje
+	de la informacion de la variable resultado *
+	Invoke dwtoa, resultado, Addr resultadotexto
+Comment*
+	Le pedimos al programa que nos muestre el resultado *
+	Invoke MessageBox, 0, Addr resultadotexto, Addr Titulo, MB_OK
+	Invoke ExitProcess, 0
+End start

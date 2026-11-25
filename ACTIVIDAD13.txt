@@ -1,0 +1,50 @@
+;un sensor lee 4 muestras consecutivas de voltaje identicas, cuyo valor base
+;esta en una variable muestra. se calcula la suma total (muestra * 4).
+;si la suma es exacmtamente igual a 200 (suma == 200)
+;imprime "coltaje optimo: balance de energia correcto".
+;si no es igual a 200, imprime "voltaje fuera de norma" y el voltaje total.
+;final: imprimir siempre "registro guardado en memoria"
+.Const
+
+.Data?
+;declaramos variable que alamcenara el dato de tipo enteto a tipo string
+	totaltext Byte 5 Dup (?)
+.Data
+;declaramos las variables necesarias para el funcionamiento del programa
+	optimo Byte "VOLTAJE OPTIMO: balance de energia correcto", 0
+	norma Byte " Voltaje fuera de norma", 0
+	adios Byte " registro guardado en memoria ", 0
+	titulo Byte "voltaje total", 0
+	total DWord 0H
+.Code
+
+start:
+;movemos el valor 50 decimal a un espacio de la memoria
+;hacemos la multiplicacion directo sin variable
+	Mov Eax, 50
+	IMul Eax, 4
+
+;almacenamos el resultado en la variable total
+	Mov total, Eax
+
+;hacemos la condicion donde sea el valor de 200
+	Cmp Eax, 200
+
+;aqui le inddicamos al programa que cuando sea == brinque al bloque igual
+	Je igual
+
+;si no se comuple la condicion, mosramos el mensaje soliciato
+	Invoke MessageBox, 0, Addr norma, Addr titulo, MB_OK
+;este hace el salto al bloque de salida
+	Jmp salida
+
+;si se cumplio la condicion de == se ejecutara este bloque
+igual:
+	Invoke MessageBox, 0, Addr optimo, Addr adios, MB_OK
+
+;independiente si se cumple o no el bloque este mensaje siempre se mostrara ya que esta al final del codigo cuando no se cumple o si se cumple
+salida:
+	Invoke dwtoa, total, Addr totaltext
+	Invoke MessageBox, 0, Addr totaltext, Addr titulo, MB_OK
+	Invoke ExitProcess, 0
+End start

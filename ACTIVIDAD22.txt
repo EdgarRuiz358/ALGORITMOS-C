@@ -1,0 +1,64 @@
+;Un estudiante cursa 3 materias modulares
+;que tienen diferente valor en créditos
+;(variable creditos_materia). Calcula el
+;avance sumado.
+;Si los créditos acumulados son mayor o
+;igual a 45 (creditos >= 45), imprime
+;"Habilitado para tramite de servicio social".
+;Si es menor a 45, imprime "Creditos
+;pendientes para liberacion".
+;Final: Imprimir siempre "Consulta de
+;expediente concluida"
+
+.Const
+
+.Data?
+;declaramos la variable que almacena el dato tipo entero a string
+	texto Byte 10 Dup(?)
+.Data
+;declaramos las variables necesarias para realizar el programa
+	creditos_materia1 	DWord 15H; valor decimal 16
+	creditos_materia2 	DWord 15H; valor decimal 21
+	creditos_materia3 	DWord 15H; valor decimal 21
+	creditos_total		DWord 00H; valor decimal 0
+	titulo1				Byte "Habilitado para tramite de servicio social", 0
+	titulo2				Byte "Creditos pendientes para liberacion", 0
+	fin1				Byte "Consulta de expediente concluida", 0
+	fin2				Byte "Fin de consulta", 0
+
+.Code
+
+start:
+;movemos la variable creditos_materia1 a espacio de memoria
+;sumamos la variable creditos_materia2
+;sumamos la variable creditos_materia3
+;el resultado de todas las operaciones lo almacenamos en creditos_total
+	Mov Eax, creditos_materia1
+	Add Eax, creditos_materia2
+	Add Eax, creditos_materia3
+	Mov creditos_total, Eax
+
+;le indicamos al programa sobre el número que será la condición (45)
+	Cmp Eax, 45
+
+;le decimos al programa que si se cumple siendo mayor o igual se ejecutará el bloque mayor
+	Jge mayor
+
+;si no se cumple (es menor a 45), entonces se va a mostrar este mensaje junto con los créditos acumulados
+	Invoke dwtoa, creditos_total, Addr texto
+	Invoke MessageBox, 0, Addr texto, Addr titulo2, MB_OK
+;esta línea de código ejecuta el bloque salida
+	Jmp salida
+
+;si se cumplió la condición (es mayor o igual a 45) se ejecuta este bloque
+mayor:
+;se convierte el resultado a texto
+;por último mostramos el mensaje junto con el total de créditos
+	Invoke dwtoa, creditos_total, Addr texto
+	Invoke MessageBox, 0, Addr texto, Addr titulo1, MB_OK
+
+;independiente si se cumple o no el bloque este mensaje siempre se mostrará ya que está al final del código
+salida:
+	Invoke MessageBox, 0, Addr fin1, Addr fin2, MB_OK
+
+End start

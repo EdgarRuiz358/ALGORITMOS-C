@@ -1,0 +1,74 @@
+;Un usuario camina distinta cantidad de
+;tramos al día. Calcula el total de tramos que
+;realizo en 5 días.
+;Si la suma es estrictamente mayor a 1000
+;(pasos > 1000), suma 100 pasos extra de
+;bonificación e imprime "Meta diaria
+;superada con bonus".
+;Si es menor o igual a 1000, imprime
+;"Objetivo basico alcanzado" y el total.
+;Final: Imprimir siempre "Sincronizando reloj"
+
+.Const
+
+.Data?
+;declaramos la variable que almacena el dato tipo entero a string
+	texto Byte 10 Dup(?)
+.Data
+;declaramos las variables necesarias para realizar el programa
+	dia1 		DWord 05H; valor decimal 5
+	dia2 		DWord 05H; valor decimal 5
+	dia3 		DWord 05H; valor decimal 5
+	dia4 		DWord 05H; valor decimal 5
+	dia5 		DWord 1000H; valor decimal 4096
+	total		DWord 00H; valor decimal 0
+	titulo1		Byte "Meta diaria superada con bonus", 0
+	titulo2		Byte "Objetivo basico alcanzado", 0
+	fin1		Byte "Sincronizando reloj", 0
+	fin2		Byte "bye bye", 0
+.Code
+
+start:
+;movemos la variable dia1 a espacio de memoria
+;sumamos la variable dia2
+;sumamos la variable dia3
+;sumamos la variable dia4
+;sumamos la variable dia5
+;el resultado de todas las operaciones lo almacenamos en total
+	Mov Eax, dia1
+	Add Eax, dia2
+	Add Eax, dia3
+	Add Eax, dia4
+	Add Eax, dia5
+	Mov total, Eax
+
+;le indicamos al programa sobre el número que será la condición (1000)
+	Cmp Eax, 1000
+
+;le decimos al programa que si se cumple siendo estrictamente mayor se ejecutará el bloque mayor
+	Jg mayor
+
+;si no se cumple (es menor o igual a 1000), entonces se va a mostrar este mensaje junto con el total
+	Invoke dwtoa, total, Addr texto
+	Invoke MessageBox, 0, Addr texto, Addr titulo2, MB_OK
+;esta línea de código ejecuta el bloque salida
+	Jmp salida
+
+;si se cumplió la condición (es mayor a 1000) se ejecuta este bloque
+mayor:
+;se mueve a memoria la variable total
+;se hace la suma de 100 pasos extra de bonificación
+;el nuevo resultado se almacena en la variable total
+;por último mostramos el mensaje
+	Mov Eax, total
+	Add Eax, 100
+	Mov total, Eax
+
+	Invoke dwtoa, total, Addr texto
+	Invoke MessageBox, 0, Addr texto, Addr titulo1, MB_OK
+
+;independiente si se cumple o no el bloque este mensaje siempre se mostrará ya que está al final del código
+salida:
+	Invoke MessageBox, 0, Addr fin1, Addr fin2, MB_OK
+
+End start

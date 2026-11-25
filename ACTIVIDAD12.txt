@@ -1,0 +1,59 @@
+;un personaje recibe 3 golpes seguidos.
+;cada golpe causa un daño distinto.
+;calcula el daño total recibido
+;si el daño total es menor a 50 (daño_total<50), imprime "Armadura intacta".
+;Si el daño Es mayor o igual a 50 resta 10 Al total e imprime el total.
+;final: imprimir siempre "Estado de combate actualizado"
+.Const
+
+.Data?
+;declaramos las variables que almacenaran el tipo de dato string
+	resultexmenor Byte 5 Dup (?)
+	resulmayorigual Byte 5 Dup (?)
+
+.Data
+;declaramos las varibales para la solicitud de la practica
+	total 	DWord 0H
+	total2 DWord 0H
+	totalmayorigual DWord 0H
+	menor Byte "Armadura intacta", 0
+	recibido Byte "total de daño", 0
+	titulo Byte "Estatus personaje", 0
+	estadoactual Byte "Fin", 0
+	adios Byte "fin de programa", 0
+.Code
+
+start:
+;movemos a un espacio de la memoria el valor 5 decimal
+;sumamos el valor 21 a la memoria 
+;sumamos el valor 21 a la memoria, con esto ya cumplimos los 3 golpes seguidos
+;almacenamos el total de la operacion en la varible total
+	Mov Eax, 05
+	Add Eax, 21
+	Add Eax, 21
+	Mov total, Eax
+;condicionamos el valor a 50
+	Cmp Eax, 50
+;si la condicion es 50 menor que saltara al bloque menorque
+	Jl menorque
+; si no se cumple la condicion se ejecuta esta parte del programa
+
+	Mov Ebx, total
+	Sub Ebx, 10
+	Mov totalmayorigual, Ebx
+	Invoke dwtoa, totalmayorigual, Addr resulmayorigual
+	Invoke MessageBox, 0, Addr resulmayorigual, Addr recibido, MB_OK
+;esta linea de codigo realiza el salto para irnos al bloque de salida
+	Jmp salida
+
+;se ejecutara este bloque cuando sea menorque 50
+menorque:
+	Invoke dwtoa, total, Addr resultexmenor
+	Invoke MessageBox, 0, Addr resultexmenor, Addr menor, MB_OK
+
+
+;independiente si se cumple o no el bloque este mensaje siempre se mostrara ya que esta al final del codigo cuando no se cumple o si se cumple
+salida:
+	Invoke MessageBox, 0, Addr adios, Addr titulo, MB_OK
+	Invoke ExitProcess, 0
+End start

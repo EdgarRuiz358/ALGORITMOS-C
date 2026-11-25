@@ -1,0 +1,47 @@
+;dadas las dimensiones de un rectangulo, calcula de forma su permietro y su area
+;perimetro = 2 x (base + altura)
+;area = base x altura
+.Const
+
+.Data?
+;se declaran dos variables para realizar la conversion de tipo entero a tipo string
+	resul 		Byte 5 Dup (?)
+	resularea 	Byte 5 Dup (?)
+.Data
+;definimos nuestras variables
+	base		DWord 05H
+	altura		DWord 0FH
+	perimetro	DWord 0H
+	area		DWord 0H
+	titulo 		Byte "Rectangulo", 0
+
+.Code
+
+start:
+;relizamos las operaciones, movemos la variable base a espacio de memoria
+;lo sumamos con la variable altura
+;lo multiplicamos por 2
+;el resultado de todas las operaciones se almacenara en la variable perimetro
+	Mov Eax, base
+	Add Eax, altura
+	IMul Eax, 2
+	Mov perimetro, Eax
+;realizamos la conversion de tipo entero a string para visualizar el mensaje
+	Invoke dwtoa, perimetro, Addr resul
+	Invoke MessageBox, 0, Addr resul, Addr titulo, MB_OK
+
+;para no modficar los resultados, manejos EBX que es otro espacio en la memoria indepediente de EAX
+;declamaros EBX en 0 ya que puede contener informacion
+;movemos a EBX la variable base
+;realizamos la operacion de altura
+;y por ultimo pasamos el resultado a la variable area
+	Mov Ebx, 0
+	Mov Ebx, base
+	IMul Ebx, altura
+	Mov area, Ebx
+;le indicamos al programa que nos muestre el resultado que obtuvimos de las operaciones en EBX
+	Invoke dwtoa, area, Addr resularea
+	Invoke MessageBox, 0, Addr resularea, Addr titulo, MB_OK
+
+	Invoke ExitProcess, 0
+End start

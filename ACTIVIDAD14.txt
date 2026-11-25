@@ -1,0 +1,55 @@
+;si se suben 3 personas que tienen distintos pesos. calcula el peso conjunto
+;si el peso acumulado es exactamente igual a 210 (peso_total == 210)
+;imprime "carga de calibracion exacta detectada"
+;si no es igual a 210, imprime "Carga estandar de operacion" y el peso total
+;final: imprimir siempre "puertas cerrandose"
+.Const
+
+.Data?
+;declaramos la variable que almacena el dato de tipo entero a string
+	resultadotexto Byte 5 Dup(?)
+.Data
+;declaramos las variables necesarias solicitadas para la realizacion del programa
+	peso1 DWord 45H; numero 70 en decimal
+	peso2 DWord 46H; numero 70 en decimal
+	peso3 DWord 46H; numero 70 en decimal
+	resultado DWord 0H; valor cero en decimal
+	titulo1 Byte "Carga de calibracion exacta detectada", 0
+	titulo2 Byte "Carga estandar de operacion", 0
+	adios Byte "Puertas Cerrandose", 0
+
+.Code
+
+start:
+;movemos la variable peso1 a espacio en la memoria
+;hacemos la suma de peso2
+;sumamos ahora peso3;
+;almacenamos el total de las operaciones en la variable resultado
+	Mov Eax, peso1
+	Add Eax, peso2
+	Add Eax, peso3
+	Mov resultado, Eax
+
+;indciamos nuestro dato donde estara la condicion
+	Cmp Eax, 210
+
+;si se cumple que sea igual entonces se ejecutara el bloque igual
+	Je igual
+
+;si no se cumple la condicion anterior entonces se realiza esta parte del codigo
+	Invoke dwtoa, resultado, Addr resultadotexto
+	Invoke MessageBox, 0, Addr resultadotexto, Addr titulo2, MB_OK
+
+;en esta linea de codigo hace la ejecucion del bloque salida
+	Jmp salida
+
+;si se cumplio la condicion, se ejecuta el bloque igual
+igual:
+
+	Invoke dwtoa, resultado, Addr resultadotexto
+	Invoke MessageBox, 0, Addr resultadotexto, Addr titulo1, MB_OK
+;independiente si se cumple o no el bloque este mensaje siempre se mostrara ya que esta al final del codigo cuando no se cumple o si se cumple
+salida:
+	Invoke dwtoa, resultado, Addr resultadotexto
+	Invoke MessageBox, 0, Addr resultadotexto, Addr adios, MB_OK
+End start

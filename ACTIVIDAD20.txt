@@ -1,0 +1,71 @@
+;Un puerto serie recibe 4 paquetes de red de
+;distinto tamaño guardado en tam_paquete.
+;Calcula el espacio total ocupado.
+;Si el tamaño total es menor o igual a 64
+;(buffer <= 64), imprime "Buffer seguro: listo
+;para procesar".
+;Si es estrictamente mayor a 64, imprime
+;"Riesgo de desbordamiento: descartando
+;paquete" y resta 16 al búfer e imprime el
+;total.
+;Final: Imprimir siempre "Canal libre"
+
+.Const
+
+.Data?
+;declaramos la variable que almacena el dato tipo entero a string
+	texto Byte 10 Dup(?)
+.Data
+;declaramos las variables necesarias para realizar el programa
+	tam_paquete1 	DWord 00H; valor decimal 0
+	tam_paquete2 	DWord 00H; valor decimal 0
+	tam_paquete3 	DWord 60H; valor decimal 96 (60H en hexadecimal)
+	tam_paquete4 	DWord 60H; valor decimal 96 (60H en hexadecimal)
+	total_ocupado 	DWord 00H; valor decimal 0
+	titulo1			Byte "Buffer seguro: listo para procesar", 0
+	titulo2			Byte "Riesgo de desbordamiento: descartando paquete", 0
+	fin1			Byte "Canal libre", 0
+	fin2			Byte "programa terminado", 0
+.Code
+
+start:
+;movemos la variable tam_paquete1 a espacio de memoria
+;sumamos la variable tam_paquete2
+;sumamos la variable tam_paquete3
+;sumamos la variable tam_paquete4
+;el resultado de todas las operaciones lo almacenamos en total_ocupado
+	Mov Eax, tam_paquete1
+	Add Eax, tam_paquete2
+	Add Eax, tam_paquete3
+	Add Eax, tam_paquete4
+	Mov total_ocupado, Eax
+
+;le indicamos al programa sobre el número que será la condición (64)
+	Cmp Eax, 64
+
+;le decimos al programa que si se cumple siendo menor o igual se ejecutará el bloque menor
+	Jle menor
+
+;si no se cumple (es estrictamente mayor a 64), entonces se resta 16 al búfer
+;el nuevo resultado se almacena en total_ocupado
+;por último mostramos el mensaje junto con el total ajustado
+	Sub Eax, 16
+	Mov total_ocupado, Eax
+	Invoke dwtoa, total_ocupado, Addr texto
+	Invoke MessageBox, 0, Addr texto, Addr titulo2, MB_OK
+;esta línea de código ejecuta el bloque salida
+	Jmp salida
+
+;si se cumplió la condición (es menor o igual a 64) se ejecuta este bloque
+menor:
+;se convierte el resultado a texto
+;por último mostramos el mensaje
+	Invoke dwtoa, total_ocupado, Addr texto
+	Invoke MessageBox, 0, Addr texto, Addr titulo1, MB_OK
+
+;independiente si se cumple o no el bloque este mensaje siempre se mostrará ya que está al final del código
+salida:
+	Invoke MessageBox, 0, Addr fin1, Addr fin2, MB_OK
+
+
+End start

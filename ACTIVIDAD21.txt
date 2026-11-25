@@ -1,0 +1,72 @@
+;Un jugador derrota a 4 enemigos del mismo
+;rango. Cada enemigo otorga una cantidad
+;de experiencia distinta. Calcula la
+;experiencia total ganada.
+;Si la experiencia acumulada es mayor o
+;igual a 120 (exp >= 120), aumenta 1 nivel al
+;personaje e imprime "Subiste de nivel!".
+;Si es menor a 120, imprime "Puntos
+;acumulados: nivel insuficiente" y el total.
+;Final: Imprimir siempre "Guardando progreso
+;del juego"
+
+.Const
+
+.Data?
+;declaramos la variable que almacena el dato tipo entero a string
+	texto Byte 10 Dup(?)
+.Data
+;declaramos las variables necesarias para realizar el programa
+	experiencia1 		DWord 05H; valor decimal 5
+	experiencia2 		DWord 05H; valor decimal 5
+	experiencia3 		DWord 05H; valor decimal 5
+	experiencia4 		DWord 100H; valor decimal 256 (100H en hexadecimal)
+	experiencia_ganada	DWord 00H; valor decimal 0
+	nivel				DWord 01H; nivel inicial del personaje (decimal 1)
+	titulo1				Byte "Subiste de nivel!", 0
+	titulo2				Byte "Puntos acumulados: nivel insuficiente", 0
+	fin1				Byte "Guardando progreso del juego", 0
+	fin2				Byte "buen juego", 0
+.Code
+
+start:
+;movemos la variable experiencia1 a espacio de memoria
+;sumamos la variable experiencia2
+;sumamos la variable experiencia3
+;sumamos la variable experiencia4
+;el resultado de todas las operaciones lo almacenamos en experiencia_ganada
+	Mov Eax, experiencia1
+	Add Eax, experiencia2
+	Add Eax, experiencia3
+	Add Eax, experiencia4
+	Mov experiencia_ganada, Eax
+
+;le indicamos al programa sobre el número que será la condición (120)
+	Cmp Eax, 120
+
+;le decimos al programa que si se cumple siendo mayor o igual se ejecutará el bloque mayor
+	Jge mayor
+
+;si no se cumple (es menor a 120), entonces se va a mostrar este mensaje junto con el total de experiencia
+	Invoke dwtoa, experiencia_ganada, Addr texto
+	Invoke MessageBox, 0, Addr texto, Addr titulo2, MB_OK
+;esta línea de código ejecuta el bloque salida
+	Jmp salida
+
+;si se cumplió la condición (es mayor o igual a 120) se ejecuta este bloque
+mayor:
+;se mueve a memoria la variable nivel
+;se suma 1 para subir de nivel al personaje
+;el nuevo resultado se almacena en la variable nivel
+;por último mostramos el mensaje junto con el nuevo nivel
+	Mov Eax, nivel
+	Add Eax, 1
+	Mov nivel, Eax
+
+	Invoke dwtoa, nivel, Addr texto
+	Invoke MessageBox, 0, Addr texto, Addr titulo1, MB_OK
+
+;independiente si se cumple o no el bloque este mensaje siempre se mostrará ya que está al final del código
+salida:
+	Invoke MessageBox, 0, Addr fin1, Addr fin2, MB_OK
+End start

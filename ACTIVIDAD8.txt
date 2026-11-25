@@ -1,0 +1,48 @@
+;Un cliente compra 3 productos distintos con diferentes cantidades. Calcula el total
+;Producto A: Cantidad = 4, Precio = 25
+;Producto B: Cantidad = 2, Precio = 60
+;Producto C: Cantidad = 5, Precio = 15
+.Const
+
+.Data?
+	resultadotex Byte 5 Dup(?)
+.Data
+;producto A: 4 unidades por 25
+	cantA 			DWord 04H; decimal 4
+	PrecioA 		DWord 19H; decimal 25
+;producto B: 2 unidades por 60
+	cantB			DWord 02H; decimal 2
+	PrecioB 		DWord 3CH; decimal 60
+;producto C: 5 unidades por 15
+	cantC			DWord 05H; decimal 5
+	PrecioC 		DWord 0FH; decimal 15
+	resultado 		DWord 00H; decimal 0
+
+	titulo Byte "Suma y multiplicacion de productos", 0;encabezado de mensaje
+.Code
+
+start:
+;limpiar acumulador
+	Mov Ebx, 0		;EBX = 0 (acumulador)
+;producto A: 4 * 25 = 100
+	Mov Eax, cantA
+	IMul Eax, PrecioA		; EAX = 4 * 25 = 100
+	Add Ebx, Eax			; EBX = 0
+
+;producto B: 2 * 60 = 120
+	Mov Eax, cantB
+	IMul Eax, PrecioB
+	Add Ebx, Eax
+;producto C; 5 * 15 = 75
+	Mov Eax, cantC
+	IMul Eax, PrecioC
+	Add Ebx, Eax
+;resultado
+	Mov resultado, Ebx
+;realizamos la conversion de tipo entero a string
+;indicamos al programa que nos muestre el mensaje
+;le indicamos al progama que termino
+	Invoke dwtoa, resultado, Addr resultadotex
+	Invoke MessageBox, 0, Addr resultadotex, Addr titulo, MB_OK
+	Invoke ExitProcess, 0
+End start

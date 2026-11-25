@@ -1,0 +1,34 @@
+;SUMAR 3 AL VALOR INICIAL DE EAX Y MULTIPLICARLO POR 10
+;PASAR LA VARIABLE EL VALOR INICIAL DE EAX
+.Const
+
+.Data?
+;se ingresa la variable que almacenara el valor en texto
+	resultadotex Byte 5 Dup(?)
+.Data
+Comment*
+se declaran las variables en numero hexadecimal y variable titulo para mostrar en la cabecera del mensaje *
+	N1 DWord 0AH; decimal 10
+	N2 DWord 03H; decimal 3
+	N0 DWord 02H; decimal 2
+	resultado DWord 0H; decimal 0
+	titulo Byte "Multiplicacion", 0; encabezado en messagebox
+.Code
+
+start:
+;la variable N0 se mueve a memoria de la computadora
+	Mov Eax, N0
+;se realiza la suma de N2 en el espacio de memoria MOV
+	Add Eax, N2
+;se realiza la multiplicacion de la suma de los numeros ya sumados
+	IMul Eax, N1
+;el reesultado de la operacion se movera a la variable resultado
+	Mov resultado, Eax
+;se realiza la conversion de dato numerico a texto 
+	Invoke dwtoa, resultado, Addr resultadotex
+;SE MUESTRA EL MENSAJE FINAL
+	Invoke MessageBox, 0, Addr resultadotex, Addr titulo, MB_OK
+;SE LE INDICA AL PROGRAMA QUE AQUI TERMINA
+	Invoke ExitProcess, 0
+
+End start

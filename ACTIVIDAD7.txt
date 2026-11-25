@@ -1,0 +1,28 @@
+;TRADUCE LA SIGUIENTE EXPRESION MATEMATICA A ENSAMBLADOR
+; RESULTADO = ((A*B)+C)-D
+.Const
+
+.Data?
+;INGRESAMOS LA VARIABLE QUE ALAMCENA EL VALOR A STRING
+	resultadotex Byte 5 Dup(?)
+.Data
+;DECLARAMOS LA VARIABLE PARA CUMPLIR LA EXPRESION EL EJERCICIO
+	a 			DWord 02H;decimal 2
+	b 			DWord 03H;decimal 3
+	c1 			DWord 04H;decimal 4
+	d 			DWord 05H;decimal 5
+	resultado 	DWord 00H;decimal 0 almacenamos el valor aqui
+	titulo 		Byte "Expresion matematica", 0
+.Code
+
+start:
+	Mov Eax, a;			movemos el primer dato para realizar la multipliacion con el segundo
+	IMul Eax, b;		este valor se multiplicara junto con el primero
+	Add Eax, c1;		hacemos la suma con el resultado de la multiplicacion
+	Sub Eax, d;			hacemos la resta de los valores anterioes cumpliendo  la expresion matematica
+	Mov resultado, Eax;	alamcenamos el valor en la variable resultado
+
+	Invoke dwtoa, resultado, Addr resultadotex; hacemos la conversion de tipo entero a tipo string
+	Invoke MessageBox, 0, Addr resultadotex, Addr titulo, MB_OK; mostramos el mensaje del resultado de la operacion
+	Invoke ExitProcess, 0; indicamos al programa que aqui finaliza
+End start
